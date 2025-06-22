@@ -23,6 +23,8 @@ jobs:
       run: npm install
     - name: install Playwright browsers
       run: npx playwright install
+    - name : Change the backend to localhost
+      run: echo "export const settings = {host:\"https://localhost:3030\"};" > src.config.js
     - name: start the backend 
       run: npm run start-be &
     - name: start the frontend 

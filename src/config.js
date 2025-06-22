@@ -1,0 +1,1 @@
+export const settings = {host: "https://libraryapp-8ysz.onrender.com"}
