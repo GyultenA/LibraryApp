@@ -1,4 +1,4 @@
-name: Build, test and deploy Library App
+name: Build, Test and Deploy LI\ibrary App
 
 on:
   push:
@@ -19,37 +19,39 @@ jobs:
       with:
         node-version: 20
         cache: 'npm'
-    - name: install dependencies
+    - name: Install dependencies
       run: npm install
-    - name: install Playwright browsers
+    - name: Install Playwright browsers
       run: npx playwright install
-    - name : Change the backend to localhost
-      run: echo "export const settings = {host:\"https://localhost:3030\"};" > src.config.js
-    - name: start the backend 
+    - name: Change the backend to localhost
+      run: echo "export const settings = {host:\"http://localhost:3030\"}" > src/config.js
+    - name: Start the Backend
       run: npm run start-be &
-    - name: start the frontend 
+    - name: Start the Frontend
       run: npm run start-fe &
-    - name: Execute UI test
+    - name: Execute the UI tests
       run: npm run test
+
   deploy-be:
     runs-on: ubuntu-latest
     needs: build_test
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy on production
+      - name: Deploy on Production
         uses: JorgeLNJunior/render-deploy@v1.4.5
         with:
-          service-id: ${{ secrets.MY_RENDER_BE}}
-          api_key: ${{secrets.MY_RENDER_API_KEY}}
+          service_id: ${{ secrets.MY_RENDER_BE }}
+          api_key: ${{ secrets.MY_RENDER_API_KEY }}
           wait_deploy: true
+
   deploy-fe:
-     runs-on: ubuntu-latest
-     needs: deploy-be
-     if: github.ref == 'refs/heads/main'
-     steps:
-      - name: Deploy on production
+    runs-on: ubuntu-latest
+    needs: deploy-be
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy on Production
         uses: JorgeLNJunior/render-deploy@v1.4.5
         with:
-          service-id: ${{ secrets.MY_RENDER_FE}}
-          api_key: ${{secrets.MY_RENDER_API_KEY}}
+          service_id: ${{ secrets.MY_RENDER_FE }}
+          api_key: ${{ secrets.MY_RENDER_API_KEY }}
           wait_deploy: true
